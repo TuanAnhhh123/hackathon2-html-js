@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+  </head>
+  <style>
+    form{
+      display: flex;
+    }
+  </style>
+  <body>
+    <h1>Admin Panel</h1>
+    <form id="projectForm">
+      <label for="projectName">Project Name:</label>
+      <input type="text" id="projectName" required /><br />
+      <label for="imageURL">Image URL:</label>
+      <input type="url" id="imageURL" required /><br />
+      <label for="link">Link:</label>
+      <input type="url" id="link" required /><br />
+      <label for="tags">Tags:</label>
+      <input type="text" id="tags" required /><br />
+      <button type="submit">Add Project</button>
+    </form>
+
+    <script>
+      document
+        .getElementById("projectForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const projectName = document.getElementById("projectName").value;
+          const imageURL = document.getElementById("imageURL").value;
+          const link = document.getElementById("link").value;
+          const tags = document.getElementById("tags").value.split(" ");
+
+          const projects = JSON.parse(localStorage.getItem("projects")) || [];
+          const newProject = {
+            projectName,
+            imageURL,
+            link,
+            tags,
+          };
+          projects.push(newProject);
+          localStorage.setItem("projects", JSON.stringify(projects));
+          alert("Project added successfully!");
+          location.reload();
+        });
+    </script>
+  </body>
+</html>

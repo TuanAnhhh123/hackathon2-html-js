@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>kết quả nhớ load lại wed mới hiện kết quả còn lại</title>
+  </head>
+  <body>
+    <h1>My Projects</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Project Name</th>
+          <th>Image</th>
+          <th>Link</th>
+          <th>Tags</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="projectTable">
+      </tbody>
+    </table>
+
+    <script>
+      function renderProjects() {
+        const projects = JSON.parse(localStorage.getItem("projects")) || [];
+        const projectTable = document.getElementById("projectTable");
+        projectTable.innerHTML = "";
+        projects.forEach((project, index) => {
+          const row = `
+                    <tr>
+                        <td>${project.projectName}</td>
+                        <td><img src="${project.imageURL}" alt="${
+            project.projectName
+          }" width="100"></td>
+                        <td><a href="${
+                          project.link
+                        }" target="_blank">Link</a></td>
+                        <td>${project.tags.join(", ")}</td>
+                        <td>
+                            <button onclick="deleteProject(${index})">Delete</button>
+                            <button onclick="editProject(${index})">Update</button>
+                        </td>
+                    </tr>
+                `;
+          projectTable.innerHTML += row;
+        });
+      }
+
+      function deleteProject(index) {
+        const projects = JSON.parse(localStorage.getItem("projects")) || [];
+        projects.splice(index, 1);
+        localStorage.setItem("projects", JSON.stringify(projects));
+        renderProjects();
+      }
+
+      function editProject(index) {
+        const projects = JSON.parse(localStorage.getItem("projects")) || [];
+        const project = projects[index];
+        const newName = prompt("Enter new project name:", project.projectName);
+        if (newName) {
+          project.projectName = newName;
+          localStorage.setItem("projects", JSON.stringify(projects));
+          renderProjects();
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", renderProjects);
+      
+    </script>
+  </body>
+</html>
